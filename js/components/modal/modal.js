@@ -7,6 +7,7 @@ import "./brew-tincture.js"
 import "./distil-poison.js"
 import "./configure-settings.js"
 import "./login.js"
+import "./hex_gate_dialer.js"
 
 class Modals extends HTMLElement {
     constructor() {
@@ -21,6 +22,7 @@ class Modals extends HTMLElement {
             <distill-modal></distill-modal>
             <settings-modal></settings-modal>
             <login-modal></login-modal>
+            <hex-gate-dialer></hex-gate-dialer>
         `;
     }
 

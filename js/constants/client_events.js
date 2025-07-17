@@ -7,5 +7,6 @@ export const ClientEvent = Object.freeze({
   REGISTER_ITEMS: "RegisterItems",
   REMOVE_ITEM: "RemoveItem",
   USE_ITEM: "UseItem",
-  AMPLIFY_EMANATION: "AmplifyEmanation"
+  AMPLIFY_EMANATION: "AmplifyEmanation",
+  DIAL_HEX_ADDRESS: "DialHexAddress"
 });

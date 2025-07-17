@@ -98,11 +98,6 @@ class InventoryModal extends HTMLElement {
             
             el.addEventListener("click", () => {
                 const itemDetails = JSON.parse(el.dataset.item);
-                
-                
-                
-                
-                
                 gnoSysTransmitClientEvent(ClientEvent.USE_ITEM,`${itemDetails.name}:${itemDetails.prefix}:${itemDetails.resonance}` );
 
             });

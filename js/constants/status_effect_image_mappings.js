@@ -7,7 +7,16 @@ export const STATUS_EFFECT_IMAGE_MAPPINGS = Object.freeze({
     Swift: formatURI("swift"),
     Blessed: formatURI("blessed"),
     Aware: formatURI("aware"),
-    Focused: formatURI("focused")
+    Focused: formatURI("focused"),
+    Burned: formatURI("burning"),
+    Drained: formatURI("hexed"),
+    Frozen: formatURI("hexed"),
+    Vunerable: formatURI("hexed"),
+    Overexerted: formatURI("hexed"),
+    Slowed: formatURI("hexed"),
+    Rot: formatURI("hexed"),
+    Exauseted: formatURI("hexed"),
+    Confused: formatURI("hexed")
 })
 
 function formatURI(name){
