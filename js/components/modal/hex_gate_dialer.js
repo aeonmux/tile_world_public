@@ -42,6 +42,7 @@ class HexGateDialer extends HTMLElement {
                 if (addrList && Array.isArray(addrList.addresses)) {
                     addrList.addresses.forEach(addr => {
                         const div = document.createElement('div');
+                        div.setAttribute('data-bs-dismiss', 'modal');
 
                         div.classList.add('arcane-container-item');
                         const name = document.createElement('span');
@@ -65,9 +66,14 @@ class HexGateDialer extends HTMLElement {
                         div.appendChild(biome);
                         div.appendChild(haz);
                         div.addEventListener('click', () => {
-                            document.querySelectorAll('.modal.show').forEach(modalEl => {
-                                bootstrap.Modal.getOrCreateInstance(modalEl).hide();
+                            document.querySelectorAll('.modal.show').forEach(el => {
+                                const inst = bootstrap.Modal.getInstance(el);
+                                if (inst) inst.hide();
                             });
+
+                            document.body.classList.remove('modal-open');
+                            document.body.style.overflow = '';
+                            document.querySelectorAll('.modal-backdrop').forEach(b => b.remove());
                             gnoSysTransmitClientEvent(ClientEvent.DIAL_HEX_ADDRESS, addr.address);
                         })
                         list.appendChild(div);
