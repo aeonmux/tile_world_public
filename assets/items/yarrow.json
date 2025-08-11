@@ -1,0 +1,15 @@
+{
+  "counter": {
+    "count": 0,
+    "limit": 0.5
+  },
+  "name": "Yarrow",
+  "tile": "HERB_FLOWER",
+  "_type": "Herb",
+  "prefix": "Weak",
+  "resonance": 1,
+  "status_effects": [
+    "Blessed"
+  ],
+  "sub_items": []
+}

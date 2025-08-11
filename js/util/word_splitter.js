@@ -20,6 +20,7 @@ const TinctureNamePart = Object.freeze({
     Blessed: {f_name: "Blessed", prefix: false},
     Aware: {f_name: "Awareness", prefix: false},
     Focused: {f_name: "Focus", prefix: false},
+    Virile: {f_name: "Vigor", prefix: false},
 });
 
 export function formatTinctureName(effects) {

@@ -1,0 +1,15 @@
+{
+  "counter": {
+    "count": 0,
+    "limit": 0.5
+  },
+  "name": "Cloud Berries",
+  "tile": "BUSH_B",
+  "_type": "Herb",
+  "prefix": "Weak",
+  "resonance": 1,
+  "status_effects": [
+    "Vitalized"
+  ],
+  "sub_items": []
+}

@@ -42,9 +42,12 @@ class LoginModal extends HTMLElement {
                         <div class="modal-body">
                                 <!-- Accounts will be loaded here -->
                         </div>
-                        <div class="modal-footer">
+                        <div class="modal-footer d-flex">
                             <div class="arcane-container-standalone-item">
                                 <div class="arcane-container-item" id="invokeCreateUser" data-bs-dismiss="modal">New Account</div>
+                            </div>
+                            <div class="arcane-container-standalone-item ms-auto">
+                                <div class="arcane-container-item" id="deleteAllAccounts">Delete / All</div>
                             </div>
                         </div>
                     </div>
@@ -72,6 +75,21 @@ class LoginModal extends HTMLElement {
         if (invokeCreateAccountButton) {
             invokeCreateAccountButton.addEventListener('click', () => this.modals.login.show());
         }
+
+        const deleteAllBtn = this.querySelector('#deleteAllAccounts');
+        if (deleteAllBtn) {
+            deleteAllBtn.addEventListener('click', async () => {
+                if (!window.electron) return;
+                const ok = confirm('Purge all accounts? This cannot be undone.');
+                if (!ok) return;
+                const res = await window.electron.deleteAllSaves();
+                if (res?.success) {
+                    this.loadAccountData();
+                } else {
+                    console.warn('Failed to delete all saves', res?.error);
+                }
+            });
+        }
     }
 
     
@@ -88,19 +106,48 @@ class LoginModal extends HTMLElement {
                 accountsContainer.innerHTML = ''; 
                 Object.keys(saveData).forEach(key => {
                     const account = saveData[key];
-                    const accountItem = document.createElement('div');
-                    accountItem.innerHTML = `
-                            <span class="w-20">${account.name}</span>
-                            <span class="w-20">| Rank: ${account.rank}</span>
-                            <span class="w-20">| Pleroma: ${account.pleroma}</span>
-                            <span class="w-20">| Playtime: 12:23:22</span>
+                    const row = document.createElement('div');
+                    row.classList.add('d-flex', 'justify-content-between', 'align-items-center');
+
+                    // Left: account info (click to load)
+                    const infoWrap = document.createElement('div');
+                    infoWrap.classList.add('arcane-container-standalone-item', 'w-70', 'mx-2');
+                    const infoItem = document.createElement('div');
+                    infoItem.classList.add('arcane-container-item');
+                    infoItem.innerHTML = `
+                        <span class="w-20">${account.name}</span>
+                        <span class="w-20">| Rank: ${account.rank}</span>
+                        <span class="w-20">| Pleroma: ${account.pleroma}</span>
+                        <span class="w-20">| Playtime: 12:23:22</span>
                     `;
-                    accountItem.classList.add("arcane-container-item");
-                    accountItem.addEventListener('click', () => {
+                    infoItem.addEventListener('click', () => {
                         gnoSysTransmitClientEvent("LoadSave", JSON.stringify(account));
-                        this.modals.account.hide()
+                        this.modals.account.hide();
                     });
-                    accountsContainer.appendChild(accountItem);
+                    infoWrap.appendChild(infoItem);
+
+                    // Right: delete button
+                    const delWrap = document.createElement('div');
+                    delWrap.classList.add('arcane-container-standalone-item', 'mx-2');
+                    const delBtn = document.createElement('div');
+                    delBtn.classList.add('arcane-container-item');
+                    delBtn.textContent = 'Delete / Account';
+                    delBtn.addEventListener('click', async (e) => {
+                        e.stopPropagation();
+                        if (!window.electron) return;
+                        const ok = confirm(`Delete account \"${account.name}\"?`);
+                        if (!ok) return;
+                        const res = await window.electron.deleteSave(account.name);
+                        if (res?.success) {
+                            this.loadAccountData();
+                        } else {
+                            console.warn('Failed to delete account', res?.error);
+                        }
+                    });
+                    delWrap.appendChild(delBtn);
+
+                    row.append(infoWrap, delWrap);
+                    accountsContainer.appendChild(row);
                 });
                 decorateUI(document);
             }

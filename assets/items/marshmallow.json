@@ -1,0 +1,15 @@
+{
+  "counter": {
+    "count": 0,
+    "limit": 0.5
+  },
+  "name": "Marshmallow",
+  "tile": "PAD_LILLY",
+  "_type": "Herb",
+  "prefix": "Weak",
+  "resonance": 1,
+  "status_effects": [
+    "IronSkinned"
+  ],
+  "sub_items": []
+}

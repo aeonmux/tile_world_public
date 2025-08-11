@@ -1,0 +1,15 @@
+{
+  "counter": {
+    "count": 0,
+    "limit": 0.5
+  },
+  "name": "Juniper Berry",
+  "tile": "SAPLING",
+  "_type": "Herb",
+  "prefix": "Weak",
+  "resonance": 1,
+  "status_effects": [
+    "Charged"
+  ],
+  "sub_items": []
+}

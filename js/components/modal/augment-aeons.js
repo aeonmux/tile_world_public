@@ -1,6 +1,7 @@
 import {decorateUI} from "../../util/ui-decorator.js";
 import {ServerEvent} from "../../constants/server_events.js";
 import {ClientEvent} from "../../constants/client_events.js";
+import {attachHoldRepeat} from "../../util/hold-repeat.js";
 
 class AeonModal extends HTMLElement {
     constructor() {
@@ -62,6 +63,7 @@ class AeonModal extends HTMLElement {
             let top = slots[0];
             slots.forEach(s => {
                 cost += s.item.resonance * s.count;
+                console.log(s.item.resonance, s.count);
                 count += s.count;
                 if (s.item.resonance > top.item.resonance) top = s;
             });
@@ -76,34 +78,90 @@ class AeonModal extends HTMLElement {
             return -diff;
         });
 
-        const bodyHTML = entries.map(entry => {
-            const disabled = this.pleroma < entry.cost;
-            return `
-            <div class="d-flex justify-content-start">
-                <div class="arcane-container-standalone-item w-70 mx-2">
-                    <div class="arcane-container-item">
-                        <span class="w-40">${entry.prefix} Emanation of ${entry.name}</span>
-                        <span class="w-20">| *** ${entry.resonance}</span>
-                        <span class="w-20">| Quantity: ${entry.count}</span>
-                    </div>
-                </div>
-                <div class="arcane-container-standalone-item mx-2">
-                    <div class="arcane-container-item ${disabled ? 'btn-disabled' : ''}" data-name="${entry.name}" data-cost="${entry.cost}">Amplify / -${entry.cost} Pleroma </div>
-                </div>
-            </div>
-            `;
-        }).join("");
-
         const body = this.querySelector(".modal-body");
-        body.innerHTML = bodyHTML;
-        decorateUI(document);
 
-        [...body.querySelectorAll('[data-name]')].forEach(el => {
-            el.addEventListener('click', () => {
-                if (el.classList.contains('btn-disabled')) return;
-                const name = el.dataset.name;
-                gnoSysTransmitClientEvent(ClientEvent.AMPLIFY_EMANATION, name);
+        const desiredOrder = entries.map(e => e.name);
+        const desiredSet = new Set(desiredOrder);
+
+        // Remove entries that no longer exist
+        [...body.querySelectorAll('[data-emanation-name]')]
+            .forEach(row => {
+                if (!desiredSet.has(row.dataset.emanationName)) row.remove();
             });
+
+        const ensureRow = (entry) => {
+            let row = body.querySelector(`[data-emanation-name="${entry.name}"]`);
+            if (!row) {
+                row = document.createElement('div');
+                row.className = 'd-flex justify-content-start';
+                row.dataset.emanationName = entry.name;
+
+                const left = document.createElement('div');
+                left.className = 'arcane-container-standalone-item w-70 mx-2';
+                const leftItem = document.createElement('div');
+                leftItem.className = 'arcane-container-item';
+                const nameSpan = document.createElement('span');
+                nameSpan.className = 'w-40 name';
+                const resSpan = document.createElement('span');
+                resSpan.className = 'w-20 resonance';
+                const qtySpan = document.createElement('span');
+                qtySpan.className = 'w-20 quantity';
+                leftItem.append(nameSpan, resSpan, qtySpan);
+                left.appendChild(leftItem);
+
+                const right = document.createElement('div');
+                right.className = 'arcane-container-standalone-item mx-2';
+                const btn = document.createElement('div');
+                btn.className = 'arcane-container-item amplify-btn';
+                btn.dataset.name = entry.name;
+                right.appendChild(btn);
+
+                row.append(left, right);
+                body.appendChild(row);
+
+                // Decorate only new UI pieces
+                decorateUI(left);
+                decorateUI(right);
+
+                // Attach action handlers once
+                const amplifyOnce = () => {
+                    if (btn.classList.contains('btn-disabled')) return;
+                    const name = btn.dataset.name;
+                    gnoSysTransmitClientEvent(ClientEvent.AMPLIFY_EMANATION, name);
+                };
+                btn.addEventListener('click', amplifyOnce);
+                attachHoldRepeat(btn, amplifyOnce, {
+                    interval: 50,
+                    startDelay: 250,
+                    animateClass: 'hold-repeat',
+                    canRun: () => !btn.classList.contains('btn-disabled')
+                });
+            }
+            return row;
+        };
+
+        // Upsert and update values without replacing elements
+        entries.forEach(entry => {
+            const row = ensureRow(entry);
+            const nameEl = row.querySelector('.name');
+            const resEl = row.querySelector('.resonance');
+            const qtyEl = row.querySelector('.quantity');
+            const btnEl = row.querySelector('.amplify-btn');
+
+            const disabled = this.pleroma < entry.cost;
+
+            nameEl.textContent = `${entry.prefix} Emanation of ${entry.name}`;
+            resEl.textContent = `| *** ${entry.resonance}`;
+            qtyEl.textContent = `| Quantity: ${entry.count}`;
+            btnEl.textContent = `Amplify / -${entry.cost} Pleroma`;
+            btnEl.dataset.cost = String(entry.cost);
+            btnEl.classList.toggle('btn-disabled', disabled);
+        });
+
+        // Reorder according to desired sort
+        desiredOrder.forEach(name => {
+            const row = body.querySelector(`[data-emanation-name="${name}"]`);
+            if (row) body.appendChild(row);
         });
     }
 }

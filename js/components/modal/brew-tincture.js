@@ -2,6 +2,7 @@ import {ClientEvent} from "../../constants/client_events.js";
 import {ServerEvent} from "../../constants/server_events.js";
 import {decorateHerbPrefix} from "../../util/prefix_decorator.js";
 import {formatTinctureName} from "../../util/word_splitter.js";
+import {attachHoldRepeat} from "../../util/hold-repeat.js";
 
 class BrewModal extends HTMLElement {
 
@@ -53,11 +54,11 @@ class BrewModal extends HTMLElement {
 
         const brewButton = this.querySelector('#brew-button');
         if (brewButton) {
-            brewButton.addEventListener('click', () => {
+            const brewOnce = () => {
                 const selected = this.querySelector('input[data-tincture]:checked');
-                if (selected && this.brewButtonEnabled) {
-                    const selectedIngredients = this.querySelectorAll('input[data-ingredient]:checked');
-                    gnoSysTransmitClientEvent(ClientEvent.ADD_ITEM, `{
+                if (!(selected && this.brewButtonEnabled)) return;
+                const selectedIngredients = this.querySelectorAll('input[data-ingredient]:checked');
+                gnoSysTransmitClientEvent(ClientEvent.ADD_ITEM, `{
                         "_type": "Tincture",
                         "name": "${brewButton.dataset.name}",
                         "tile": "TINCTURE",
@@ -65,11 +66,25 @@ class BrewModal extends HTMLElement {
                         "resonance": ${brewButton.dataset.resonance},
                         "status_effects": [${selected.dataset.effects.split(",").map(p => `"${p}"`).join(",")}]
                     }`);
-                    [...selectedIngredients].map(s => s.dataset).forEach(selectedIngDataset => {
-                        gnoSysTransmitClientEvent(ClientEvent.REMOVE_ITEM,`${selectedIngDataset.rawName}:${selectedIngDataset.prefix}:${selectedIngDataset.resonance}` );
-                    });
+                [...selectedIngredients].map(s => s.dataset).forEach(ds => {
+                    gnoSysTransmitClientEvent(ClientEvent.REMOVE_ITEM, `${ds.rawName}:${ds.prefix}:${ds.resonance}`);
+                });
+            };
+
+            // Single click still brews once
+            brewButton.addEventListener('click', brewOnce);
+
+            // Hold-to-repeat, fires every 50ms after a short delay
+            attachHoldRepeat(
+                brewButton,
+                () => brewOnce(),
+                {
+                    interval: 50,
+                    startDelay: 250,
+                    animateClass: 'hold-repeat',
+                    canRun: () => this.brewButtonEnabled && !brewButton.classList.contains('btn-disabled')
                 }
-            });
+            );
         }
     }
 

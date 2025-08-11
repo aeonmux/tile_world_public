@@ -1,6 +1,7 @@
 import {ServerEvent} from "../../constants/server_events.js";
 import {decorateUI} from "../../util/ui-decorator.js";
 import {ClientEvent} from "../../constants/client_events.js";
+import {attachHoldRepeat} from "../../util/hold-repeat.js";
 
 class InventoryModal extends HTMLElement {
     constructor() {
@@ -76,31 +77,82 @@ class InventoryModal extends HTMLElement {
             return this.sortOrder === "desc" ? -diff : diff;
         });
 
-        
-        const bodyHTML = sorted.map(slot => `
-      <div class="arcane-container-item">
-        <span class="w-40">${slot.item.prefix} ${slot.item.name}</span>
-        <span class="w-20">| *** ${slot.item.resonance}</span>
-        <span class="w-20">| Quantity: ${slot.count}</span>
-        <span class="w-20">| Type: ${slot.item._type}</span>
-      </div>
-    `).join("");
-
         const body = this.querySelector(".modal-body");
-        body.innerHTML = bodyHTML;
-        decorateUI(document);
 
-        
-        sorted.forEach((slot, index) => {
-            const el = body.children[index];
-            
-            el.dataset.item = JSON.stringify(slot.item);
-            
-            el.addEventListener("click", () => {
-                const itemDetails = JSON.parse(el.dataset.item);
-                gnoSysTransmitClientEvent(ClientEvent.USE_ITEM,`${itemDetails.name}:${itemDetails.prefix}:${itemDetails.resonance}` );
+        const keyOf = (slot) => `${slot.item.name}|${slot.item.prefix}|${slot.item.resonance}`;
+        const desiredOrder = sorted.map(keyOf);
+        const desiredSet = new Set(desiredOrder);
 
-            });
+        // Remove rows that are no longer present
+        [...body.querySelectorAll('.tincture-row')].forEach(row => {
+            if (!desiredSet.has(row.dataset.key)) row.remove();
+        });
+
+        // Create missing rows and update existing ones
+        sorted.forEach(slot => {
+            const key = keyOf(slot);
+            let row = body.querySelector(`.tincture-row[data-key="${key}"]`);
+            if (!row) {
+                row = document.createElement('div');
+                row.className = 'arcane-container-item tincture-row';
+                row.dataset.key = key;
+
+                const name = document.createElement('span');
+                name.className = 'w-40 name';
+                const res = document.createElement('span');
+                res.className = 'w-20 resonance';
+                const qty = document.createElement('span');
+                qty.className = 'w-20 quantity';
+                const type = document.createElement('span');
+                type.className = 'w-20 type';
+
+                row.append(name, res, qty, type);
+                body.appendChild(row);
+
+                // Decorate only the new row
+                decorateUI(row);
+
+                // Single click + hold-to-repeat
+                const useOnce = () => {
+                    const itemDetails = JSON.parse(row.dataset.item);
+                    const remaining = Number(row.dataset.remaining || '0');
+                    if (remaining <= 0) return;
+                    gnoSysTransmitClientEvent(
+                        ClientEvent.USE_ITEM,
+                        `${itemDetails.name}:${itemDetails.prefix}:${itemDetails.resonance}`
+                    );
+                    row.dataset.remaining = String(remaining - 1);
+                    qty.textContent = `| Quantity: ${row.dataset.remaining}`;
+                };
+
+                row.addEventListener('click', useOnce);
+                attachHoldRepeat(row, useOnce, {
+                    interval: 50,
+                    startDelay: 250,
+                    animateClass: 'hold-repeat',
+                    canRun: () => Number(row.dataset.remaining || '0') > 0
+                });
+            }
+
+            // Update texts and sync remaining with server count
+            const nameEl = row.querySelector('.name');
+            const resEl = row.querySelector('.resonance');
+            const qtyEl = row.querySelector('.quantity');
+            const typeEl = row.querySelector('.type');
+
+            nameEl.textContent = `${slot.item.prefix} ${slot.item.name}`;
+            resEl.textContent = `| *** ${slot.item.resonance}`;
+            typeEl.textContent = `| Type: ${slot.item._type}`;
+
+            row.dataset.item = JSON.stringify(slot.item);
+            row.dataset.remaining = String(slot.count);
+            qtyEl.textContent = `| Quantity: ${slot.count}`;
+        });
+
+        // Reorder rows to match sort
+        desiredOrder.forEach(key => {
+            const row = body.querySelector(`.tincture-row[data-key="${key}"]`);
+            if (row) body.appendChild(row);
         });
     }
 }

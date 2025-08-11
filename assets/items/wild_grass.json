@@ -1,0 +1,15 @@
+{
+  "counter": {
+    "count": 0,
+    "limit": 0.5
+  },
+  "name": "Wild Grass",
+  "tile": "GRASSB",
+  "_type": "Herb",
+  "prefix": "Weak",
+  "resonance": 1,
+  "status_effects": [
+    "Limber"
+  ],
+  "sub_items": []
+}

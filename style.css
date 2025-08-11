@@ -109,6 +109,7 @@ canvas:focus {
     display: flex;
     gap: 1rem;
     text-wrap: nowrap;
+    position: relative;
 }
 .arcane-container-item:hover,
 .arcane-container-item:focus {
@@ -540,6 +541,29 @@ label {
     filter: invert(1);
 }
 
+
+/* Hold-to-repeat animation */
+@keyframes hold-stripes {
+    to {
+        background-position: 20px 0;
+    }
+}
+
+.arcane-container-item.hold-repeat::before {
+    content: "";
+    position: absolute;
+    inset: 0 1rem 0 0; /* do not paint over trailing margin */
+    background: repeating-linear-gradient(
+            45deg,
+            rgba(105, 224, 97, 0.15) 0px,
+            rgba(105, 224, 97, 0.15) 6px,
+            rgba(0, 184, 255, 0.15) 6px,
+            rgba(0, 184, 255, 0.15) 12px
+    );
+    background-size: 20px 20px;
+    animation: hold-stripes 0.5s linear infinite;
+    pointer-events: none;
+}
 
 
 
