@@ -6,5 +6,6 @@ export const ServerEvent = Object.freeze({
   REGISTERED_ITEMS: "RegisteredItems",
   GAME_STATE_CHANGED: "GameStateChanged",
   LOADING_PROGRESS: "LoadingProgress",
-  WARP: "Warp"
+  WARP: "Warp",
+  EXTRACT: "Extract", 
 });

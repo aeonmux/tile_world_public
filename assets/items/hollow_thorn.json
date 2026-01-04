@@ -1,13 +1,8 @@
 {
-  "counter": {
-    "count": 0,
-    "limit": 0.5
-  },
   "name": "Hollow Thorn",
   "tile": "GRASSA",
   "_type": "Herb",
-  "prefix": "Weak",
-  "resonance": 1,
-  "status_effects": ["Charged"],
-  "sub_items": []
+  "status_effects": [
+    "Charged"
+  ]
 }

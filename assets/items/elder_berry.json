@@ -1,15 +1,8 @@
 {
-  "counter": {
-    "count": 0,
-    "limit": 0.5
-  },
   "name": "Elder Berry",
   "tile": "ELDERFLOWER",
   "_type": "Herb",
-  "prefix": "Weak",
-  "resonance": 1,
   "status_effects": [
     "Virile"
-  ],
-  "sub_items": []
+  ]
 }

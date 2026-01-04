@@ -1,0 +1,8 @@
+{
+  "name": "Aeon of Vitality",
+  "tile": "GRASSA",
+  "_type": "Aeon",
+  "status_effects": [
+    "Vitalized"
+  ]
+}

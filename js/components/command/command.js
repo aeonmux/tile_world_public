@@ -10,18 +10,12 @@ class ArcaneCommand extends HTMLElement {
             <!-- Persona section starts expanded -->
             <div class="arcane-container-header">⬡ Persona</div>
             <div class="arcane-container-item hex-collapse" id="statusItem">Check / Status</div>
-            <div class="arcane-container-item hex-collapse" id="aeonItem">Amplify / Emanation</div>
-            <div class="arcane-container-item hex-collapse" id="inventoryItem">Consume / Tincture</div>
             
             <!-- Equipment section starts collapsed -->
             <div class="arcane-container-header">⬡ Equipment</div>
-            <div class="arcane-container-item hex-collapse" id="honeItem">Forge / Sword</div>
-            <div class="arcane-container-item hex-collapse" id="refineItem">Fletch / Arrow</div>
-            
-            <!-- Alchemy section starts collapsed -->
-            <div class="arcane-container-header">⬡ Alchemy</div>
-            <div class="arcane-container-item hex-collapse" id="brewItem">Brew / Tincture</div>
-            <div class="arcane-container-item hex-collapse" id="distillItem">Distill / Poison</div>
+            <div class="arcane-container-item hex-collapse" id="inventoryItem">View / Inventory</div>
+            <div class="arcane-container-item hex-collapse" id="elementsItem">Alchemical / Breakdown</div>
+            <div class="arcane-container-item hex-collapse" id="elementsItem">Consume / Tinctures</div>
             
             <!-- System section starts collapsed -->
             <div class="arcane-container-header">⬡ System</div>
@@ -36,6 +30,9 @@ class ArcaneCommand extends HTMLElement {
         
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Shift' && !e.repeat) {
+                if (window.gameState && window.gameState !== "Playing") {
+                    return;
+                }
                 const activeMenu = this.querySelector('.active-menu');
                 if (activeMenu) {
                     activeMenu.classList.toggle('hidden');
@@ -73,6 +70,7 @@ class ArcaneCommand extends HTMLElement {
             { itemId: 'settingsItem', modalId: 'settingsModal' },
             { itemId: 'distillItem', modalId: 'distillModal' },
             { itemId: 'inventoryItem', modalId: 'inventoryModal' },
+            { itemId: 'elementsItem', modalId: 'elementsModal' },
             { itemId: 'refineItem', modalId: 'refineModal' }
         ];
 

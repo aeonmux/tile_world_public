@@ -1,0 +1,8 @@
+{
+  "name": "Aeon of Swiftness",
+  "tile": "GRASSA",
+  "_type": "Aeon",
+  "status_effects": [
+    "Swift"
+  ]
+}

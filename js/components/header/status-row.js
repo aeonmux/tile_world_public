@@ -54,6 +54,9 @@ class StatusRow extends HTMLElement {
         
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Shift' && !e.repeat) {
+                if (window.gameState && window.gameState !== "Playing") {
+                    return;
+                }
                 if (this.statusRow) {
                     this.statusRow.classList.toggle('active');
                     this.effectRow.classList.toggle('active');

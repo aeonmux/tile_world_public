@@ -34,9 +34,17 @@ function handleFirstEvent() {
       document.querySelector('login-modal')?.showAccountModal();
   })
   registerGnoSysServerEventHandler(ServerEvent.GAME_STATE_CHANGED, state => {
-    if (state === "PLAYING" && !controlToastShown) {
+    window.gameState = state;
+    if (state === "Playing" && !controlToastShown) {
       showControlToasts();
       controlToastShown = true;
+    }
+    if (state === "PrePlay") {
+      const modalElement = document.querySelector("#gnosysNetworkModal");
+      if (modalElement && window.bootstrap) {
+        const modal = new bootstrap.Modal(modalElement);
+        modal.show();
+      }
     }
   });
 }
@@ -44,12 +52,14 @@ function handleFirstEvent() {
 function initAutoSave() {
   registerGnoSysServerEventHandler(ServerEvent.PLAYER_UPDATE, playerInfo => {
     try {
-      if (window.sendPlayerInfoCount % 100 === 0) {
         window.electron.persistSaveData(playerInfo)
-      }
     } catch (error) {
       console.error("COULD NOT PARSE PLAYER DATA");
     }
+    window.playerInventory = playerInfo.inventory || null;
+    window.dispatchEvent(
+      new CustomEvent("player-inventory-updated", { detail: window.playerInventory })
+    );
   });
 }
 

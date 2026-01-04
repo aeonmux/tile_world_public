@@ -1,0 +1,8 @@
+{
+  "name": "Aeon of Fury",
+  "tile": "GRASSA",
+  "_type": "Aeon",
+  "status_effects": [
+    "Wired"
+  ]
+}

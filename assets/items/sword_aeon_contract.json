@@ -1,0 +1,8 @@
+{
+  "name": "Aeon of the Blade",
+  "tile": "GRASSA",
+  "_type": "Aeon",
+  "status_effects": [
+    "SwordBond"
+  ]
+}

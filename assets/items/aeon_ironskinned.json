@@ -1,0 +1,8 @@
+{
+  "name": "Aeon of Iron Skin",
+  "tile": "GRASSA",
+  "_type": "Aeon",
+  "status_effects": [
+    "IronSkinned"
+  ]
+}

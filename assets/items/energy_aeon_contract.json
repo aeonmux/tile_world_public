@@ -1,0 +1,8 @@
+{
+  "name": "Aeon of Virility",
+  "tile": "GRASSA",
+  "_type": "Aeon",
+  "status_effects": [
+    "Virile"
+  ]
+}

@@ -11,11 +11,11 @@ export const STATUS_EFFECT_IMAGE_MAPPINGS = Object.freeze({
     Burned: formatURI("burning"),
     Drained: formatURI("hexed"),
     Frozen: formatURI("hexed"),
-    Vunerable: formatURI("hexed"),
+    Vulnerable: formatURI("hexed"),
     Overexerted: formatURI("hexed"),
     Slowed: formatURI("hexed"),
     Rot: formatURI("hexed"),
-    Exauseted: formatURI("hexed"),
+    Exhausted: formatURI("hexed"),
     Confused: formatURI("hexed")
 })
 

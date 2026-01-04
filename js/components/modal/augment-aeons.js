@@ -15,7 +15,7 @@ class AeonModal extends HTMLElement {
     <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content arcane-container" style="background: #1f1f23;">
             <div class="modal-header">
-                <h1 class="modal-title arcane-container-header fs-5" id="exampleModalLabel">Amplify / Emanations</h1>
+                <h1 class="modal-title arcane-container-header fs-5" id="exampleModalLabel">Amplify / Aeons</h1>
             </div>
             <div class="modal-body">
                 <!-- EMANATION LIST -->
@@ -33,7 +33,7 @@ class AeonModal extends HTMLElement {
 
     connectedCallback() {
         registerGnoSysServerEventHandler(ServerEvent.PLAYER_UPDATE, (playerInfo) => {
-            const slots = playerInfo.inventory.slots.filter(slot => slot.item._type === "Emanation");
+            const slots = playerInfo.inventory.slots.filter(slot => slot.item._type === "Aeon");
             const json = JSON.stringify(slots);
             const pleroma = playerInfo.pleroma;
 
@@ -150,7 +150,7 @@ class AeonModal extends HTMLElement {
 
             const disabled = this.pleroma < entry.cost;
 
-            nameEl.textContent = `${entry.prefix} Emanation of ${entry.name}`;
+            nameEl.textContent = `${entry.prefix} Aeon of ${entry.name}`;
             resEl.textContent = `| *** ${entry.resonance}`;
             qtyEl.textContent = `| Quantity: ${entry.count}`;
             btnEl.textContent = `Amplify / -${entry.cost} Pleroma`;

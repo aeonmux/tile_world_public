@@ -1,0 +1,8 @@
+{
+  "name": "Aeon of Awareness",
+  "tile": "GRASSA",
+  "_type": "Aeon",
+  "status_effects": [
+    "Aware"
+  ]
+}

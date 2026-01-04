@@ -1,0 +1,8 @@
+{
+  "name": "Aeon of Confusion",
+  "tile": "GRASSA",
+  "_type": "Aeon",
+  "status_effects": [
+    "Confused"
+  ]
+}

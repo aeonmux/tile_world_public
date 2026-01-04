@@ -35,10 +35,10 @@ function createAndShow(message) {
     toastEl.setAttribute('data-bs-delay', '5000');
 
     toastEl.innerHTML = `
-        <div class="toast-header">
-            <div class="arcane-container-header me-auto mb-0"> / Notification</div>
-            <button type="button" class="btn-close btn-close-white ms-2 mb-1" data-bs-dismiss="toast" aria-label="Close"></button>
-        </div>
+<!--        <div class="toast-header">-->
+<!--&lt;!&ndash;            <div class="arcane-container-header me-auto mb-0"> / Notification</div>&ndash;&gt;-->
+<!--            <button type="button" class="btn-close btn-close-white ms-2 mb-1" data-bs-dismiss="toast" aria-label="Close"></button>-->
+<!--        </div>-->
         <div class="toast-body">${message}</div>`;
 
     container.appendChild(toastEl);

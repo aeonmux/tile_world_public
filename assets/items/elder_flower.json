@@ -1,13 +1,8 @@
 {
-  "counter": {
-    "count": 0,
-    "limit": 0.5
-  },
   "name": "Elder Flower",
   "tile": "ELDERFLOWER",
-  "resonance": 1,
-  "prefix": "Weak",
   "_type": "Herb",
-  "status_effects": ["Aware"],
-  "sub_items": []
+  "status_effects": [
+    "Aware"
+  ]
 }

@@ -1,0 +1,8 @@
+{
+  "name": "Flesh",
+  "tile": "CACTUS",
+  "_type": "Zoomass",
+  "status_effects": [
+    "Vitalized"
+  ]
+}

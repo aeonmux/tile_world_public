@@ -1,0 +1,8 @@
+{
+  "name": "Aeon of Charge",
+  "tile": "GRASSA",
+  "_type": "Aeon",
+  "status_effects": [
+    "Charged"
+  ]
+}

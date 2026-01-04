@@ -16,35 +16,21 @@
     }
   }
 
-  const itemFiles = [
-    'elder_flower.json',
-    'hollow_thorn.json',
-    'mushroom.json',
-    'sage.json',
-    // New herbs
-    'chamomile.json',
-    'marshmallow.json',
-    'meadowsweet.json',
-    'elder_berry.json',
-    'mint.json',
-    'cloud_berries.json',
-    'crow_berries.json',
-    'wild_grass.json',
-    'aloe_vera.json',
-    'arnica.json',
-    'blue_whortleberry.json',
-    'yarrow.json',
-    'angelica.json',
-    'juniper_berry.json',
-    'birch_bark.json',
-    'pine_needles.json',
-    'heather.json',
-    'tincture.json',
-    'energy_eminence.json',
-      'vitality_eminence.json',
-      'sword_eminence.json',
-      'bow_eminence.json'
-  ];
+  async function loadItemIndex() {
+    try {
+      const resp = await fetch('assets/items/');
+      if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+      const html = await resp.text();
+      const doc = new DOMParser().parseFromString(html, 'text/html');
+      return Array.from(doc.querySelectorAll('a'))
+        .map((a) => a.getAttribute('href'))
+        .filter((href) => href && href.endsWith('.json'))
+        .map((href) => href.split('/').pop());
+    } catch (err) {
+      console.error('Failed to auto-discover item JSON files', err);
+      return [];
+    }
+  }
 
   function loadLocalSaves() {
     try {
@@ -69,6 +55,7 @@
   window.electron = {
     async prefetch() {
       const items = [];
+      const itemFiles = await loadItemIndex();
       for (const file of itemFiles) {
         const data = await fetchJson(`assets/items/${file}`);
         if (data) items.push(data);

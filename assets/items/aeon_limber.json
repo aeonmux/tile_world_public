@@ -1,0 +1,8 @@
+{
+  "name": "Aeon of Agility",
+  "tile": "GRASSA",
+  "_type": "Aeon",
+  "status_effects": [
+    "Limber"
+  ]
+}

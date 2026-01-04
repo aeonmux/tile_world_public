@@ -4,9 +4,12 @@ export const ClientEvent = Object.freeze({
   PAUSE_GAME: "PauseGame",
   CREATE_USER: "CreateUser",
   ADD_ITEM: "AddItem",
+  BEGIN_DIALING: "BeginDialing",
   REGISTER_ITEMS: "RegisterItems",
   REMOVE_ITEM: "RemoveItem",
   USE_ITEM: "UseItem",
+  EQUIP_ITEM: "EquipItem",
   AMPLIFY_EMANATION: "AmplifyEmanation",
-  DIAL_HEX_ADDRESS: "DialHexAddress"
+  DIAL_HEX_ADDRESS: "DialHexAddress",
+  START_GAME: "StartGame"
 });

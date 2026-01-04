@@ -1,0 +1,8 @@
+{
+  "name": "Aeon of the Bow",
+  "tile": "GRASSA",
+  "_type": "Aeon",
+  "status_effects": [
+    "BowBond"
+  ]
+}

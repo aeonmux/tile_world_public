@@ -1,15 +1,8 @@
 {
-  "counter": {
-    "count": 0,
-    "limit": 0.5
-  },
   "name": "Meadowsweet",
   "tile": "LEAFY_LONG_STALK",
   "_type": "Herb",
-  "prefix": "Weak",
-  "resonance": 1,
   "status_effects": [
     "Swift"
-  ],
-  "sub_items": []
+  ]
 }

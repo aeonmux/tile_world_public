@@ -1,0 +1,8 @@
+{
+  "name": "Aeon of Exhaustion",
+  "tile": "GRASSA",
+  "_type": "Aeon",
+  "status_effects": [
+    "Exhausted"
+  ]
+}

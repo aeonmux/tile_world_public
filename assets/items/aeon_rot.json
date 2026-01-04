@@ -1,0 +1,8 @@
+{
+  "name": "Aeon of Rot",
+  "tile": "GRASSA",
+  "_type": "Aeon",
+  "status_effects": [
+    "Rot"
+  ]
+}

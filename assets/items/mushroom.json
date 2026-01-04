@@ -1,13 +1,8 @@
 {
-  "counter": {
-    "count": 0,
-    "limit": 0.5
-  },
   "name": "Mushroom",
   "tile": "MUSHROOM",
   "_type": "Herb",
-  "prefix": "Weak",
-  "status_effects": ["Vitalized"],
-  "resonance": 1,
-  "sub_items": []
+  "status_effects": [
+    "Vitalized"
+  ]
 }

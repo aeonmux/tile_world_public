@@ -1,0 +1,8 @@
+{
+  "name": "Aeon of Slow",
+  "tile": "GRASSA",
+  "_type": "Aeon",
+  "status_effects": [
+    "Slowed"
+  ]
+}
