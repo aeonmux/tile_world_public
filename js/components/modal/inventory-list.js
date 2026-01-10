@@ -1,5 +1,4 @@
 import {decorateUI} from "../../util/ui-decorator.js";
-import {attachHoldRepeat} from "../../util/hold-repeat.js";
 
 export function renderInventoryList({
     container,
@@ -7,8 +6,7 @@ export function renderInventoryList({
     sortOrder = "desc",
     onUse,
     onHover,
-    enableHoldRepeat = false,
-    decrementOnUse = true,
+    collapseState = {},
 }) {
     const weights = { Weak: 1, Mild: 2, Strong: 3, Potent: 4 };
     const sorted = [...(slots || [])].sort((a, b) => {
@@ -21,59 +19,75 @@ export function renderInventoryList({
 
     container.innerHTML = "";
 
-    sorted.forEach(slot => {
-        const row = document.createElement("div");
-        row.className = "arcane-container-item tincture-row";
+    const groups = new Map();
+    sorted.forEach((slot) => {
+        const groupType = slot?.item?._type || "Unknown";
+        if (!groups.has(groupType)) groups.set(groupType, []);
+        groups.get(groupType).push(slot);
+    });
 
-        const name = document.createElement("span");
-        name.className = "w-40 name";
-        const res = document.createElement("span");
-        res.className = "w-20 resonance";
-        const qty = document.createElement("span");
-        qty.className = "w-20 quantity";
-        const type = document.createElement("span");
-        type.className = "w-20 type";
+    const sortedGroupKeys = Array.from(groups.keys()).sort((a, b) =>
+        String(a).localeCompare(String(b))
+    );
 
-        row.append(name, res, qty, type);
-        container.appendChild(row);
+    sortedGroupKeys.forEach((groupType) => {
+        const groupSlots = groups.get(groupType) || [];
+        const isExpanded = collapseState[groupType] === true;
+        const header = document.createElement("div");
+        header.className = "arcane-container-item tincture-row";
+        header.textContent = `${isExpanded ? "-" : "+"} ${groupType}`;
+        container.appendChild(header);
 
-        decorateUI(row);
+        const groupEl = document.createElement("div");
+        groupEl.style.display = isExpanded ? "" : "none";
+        container.appendChild(groupEl);
 
-        row.dataset.item = JSON.stringify(slot.item);
-        row.dataset.remaining = String(slot.count);
+        header.addEventListener("click", () => {
+            const nextExpanded = collapseState[groupType] !== true;
+            collapseState[groupType] = nextExpanded;
+            header.textContent = `${nextExpanded ? "-" : "+"} ${groupType}`;
+            groupEl.style.display = nextExpanded ? "" : "none";
+            decorateUI(document);
+        });
 
-        name.textContent = `${slot.item.prefix} ${slot.item.name}`;
-        res.textContent = `| *** ${slot.item.resonance}`;
-        type.textContent = `| Type: ${slot.item._type}`;
-        qty.textContent = `| Quantity: ${slot.count}`;
+        groupSlots
+            .sort((a, b) => b.item.resonance - a.item.resonance)
+            .forEach(slot => {
+            const row = document.createElement("div");
+            row.className = "arcane-container-sub-item arcane-container-item tincture-row";
 
-        if (onHover) {
-            row.addEventListener("mouseenter", () => {
-                onHover(JSON.parse(row.dataset.item));
-            });
-        }
+            const name = document.createElement("span");
+            name.className = "w-40 name";
+            const res = document.createElement("span");
+            res.className = "w-20 resonance";
+            const type = document.createElement("span");
+            type.className = "w-20 type";
 
-        if (onUse) {
-            const useOnce = () => {
-                const itemDetails = JSON.parse(row.dataset.item);
-                const remaining = Number(row.dataset.remaining || "0");
-                if (remaining <= 0) return;
-                onUse(itemDetails, row);
-                if (decrementOnUse) {
-                    row.dataset.remaining = String(remaining - 1);
-                    qty.textContent = `| Quantity: ${row.dataset.remaining}`;
-                }
-            };
+            row.append(name, res, type);
+            groupEl.appendChild(row);
 
-            row.addEventListener("click", useOnce);
-            if (enableHoldRepeat) {
-                attachHoldRepeat(row, useOnce, {
-                    interval: 50,
-                    startDelay: 250,
-                    animateClass: "hold-repeat",
-                    canRun: () => Number(row.dataset.remaining || "0") > 0,
+            decorateUI(row);
+
+            row.dataset.item = JSON.stringify(slot.item);
+            name.textContent = `${slot.item.prefix} ${slot.item.name}`;
+            res.textContent = `| *** ${slot.item.resonance}`;
+            type.textContent = `| Type: ${slot.item._type}`;
+
+            if (onHover) {
+                row.addEventListener("mouseenter", () => {
+                    onHover(JSON.parse(row.dataset.item));
                 });
             }
-        }
+
+            if (onUse) {
+                const useOnce = () => {
+                    const itemDetails = JSON.parse(row.dataset.item);
+                    onUse(itemDetails, row);
+                };
+
+                row.addEventListener("click", useOnce);
+            }
+            });
     });
+    decorateUI(document);
 }

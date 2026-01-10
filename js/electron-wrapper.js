@@ -18,6 +18,11 @@
 
   async function loadItemIndex() {
     try {
+      const indexResp = await fetch('assets/items/index.json');
+      if (indexResp.ok) {
+        const list = await indexResp.json();
+        return Array.isArray(list) ? list : [];
+      }
       const resp = await fetch('assets/items/');
       if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
       const html = await resp.text();
@@ -42,12 +47,32 @@
     }
   }
 
+  function loadLocalHeapSaves() {
+    try {
+      const raw = localStorage.getItem('saveDataHeap');
+      return raw ? JSON.parse(raw) : {};
+    } catch (err) {
+      console.error('Failed to parse heap save data from localStorage', err);
+      return {};
+    }
+  }
+
   function writeLocalSaves(data) {
     try {
       localStorage.setItem('saveData', JSON.stringify(data));
       return { success: true };
     } catch (err) {
       console.error('Failed to write save data to localStorage', err);
+      return { success: false, error: err.message };
+    }
+  }
+
+  function writeLocalHeapSaves(data) {
+    try {
+      localStorage.setItem('saveDataHeap', JSON.stringify(data));
+      return { success: true };
+    } catch (err) {
+      console.error('Failed to write heap save data to localStorage', err);
       return { success: false, error: err.message };
     }
   }
@@ -65,6 +90,13 @@
     async findSaveData() {
       return loadLocalSaves();
     },
+    async findHeapData(username) {
+      const data = loadLocalHeapSaves();
+      if (!username) return data;
+      const entry = data[username];
+      if (entry && entry.heap) return entry.heap;
+      return entry || null;
+    },
     async createNewSave(playerInfo) {
       const data = loadLocalSaves();
       data[playerInfo.name] = playerInfo;
@@ -74,6 +106,11 @@
       const data = loadLocalSaves();
       data[playerInfo.name] = playerInfo;
       return writeLocalSaves(data);
+    },
+    async persistHeapData(playerInfo) {
+      const data = loadLocalHeapSaves();
+      data[playerInfo.name] = playerInfo;
+      return writeLocalHeapSaves(data);
     },
       async deleteSave(username) {
           const data = loadLocalSaves();

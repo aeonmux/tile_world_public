@@ -2,6 +2,7 @@ html {
     font-size: clamp(0.65rem, 1.4vw, 1.0rem);
     text-wrap: nowrap;
     text-rendering: optimizeLegibility;
+    user-select: none;
 }
 
 .modal-dialog {
@@ -40,7 +41,7 @@ html {
 }
 *::-webkit-scrollbar-thumb {
     background-color: rgb(2, 232, 165);
-}
+}.
 *::-webkit-scrollbar-thumb:hover,
 *::-webkit-scrollbar-thumb:active {
     background-color:
@@ -111,6 +112,9 @@ canvas:focus {
     text-wrap: nowrap;
     position: relative;
 }
+.arcane-container-sub-item {
+    margin-left: 0.3rem;
+}
 .arcane-select-row {
     align-items: center;
 }
@@ -176,6 +180,7 @@ option:hover {
     overflow-y: auto;
     overflow-x: hidden;
     font-size: smaller;
+    z-index: 1000000;
 }
 .scanner {
     height: 10vh;
@@ -352,9 +357,11 @@ option:hover {
     flex-direction: column; 
     transition: color 0.5s ease;
     color: white; 
-    max-height: 20vh; 
-    overflow-y: hidden;    width: 30vw;
+    max-height: 20vh;
+    overflow-y: hidden;
+    width: 30rem;
     z-index: 100;
+
 }
 
 

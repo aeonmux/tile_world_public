@@ -1,4 +1,9 @@
 {
   "name": "Crossbow",
-  "_type": "Weapon"
+  "_type": "Weapon",
+  "equipment_details": {
+    "equipmentType": [
+      "RangedWeapon"
+    ]
+  }
 }

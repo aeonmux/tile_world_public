@@ -1,6 +1,7 @@
 import "./util/ui-decorator.js";
 import "./components/mod.js";
 import {ServerEvent} from "./constants/server_events.js";
+import {initPlayerInventoryEvents} from "./player-inventory-events.js";
 
 async function prefetch() {
   let items = await window.electron.prefetch();
@@ -10,7 +11,7 @@ async function prefetch() {
 function init() {
   prefetch();
   handleFirstEvent();
-  initAutoSave();
+  initPlayerInventoryEvents();
 }
 
 function showControlToasts() {
@@ -46,20 +47,6 @@ function handleFirstEvent() {
         modal.show();
       }
     }
-  });
-}
-
-function initAutoSave() {
-  registerGnoSysServerEventHandler(ServerEvent.PLAYER_UPDATE, playerInfo => {
-    try {
-        window.electron.persistSaveData(playerInfo)
-    } catch (error) {
-      console.error("COULD NOT PARSE PLAYER DATA");
-    }
-    window.playerInventory = playerInfo.inventory || null;
-    window.dispatchEvent(
-      new CustomEvent("player-inventory-updated", { detail: window.playerInventory })
-    );
   });
 }
 

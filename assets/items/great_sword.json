@@ -1,4 +1,10 @@
 {
   "name": "GreatSword",
-  "_type": "Weapon"
+  "_type": "Weapon",
+  "tile_animation": "SwordSwipe",
+  "equipment_details": {
+    "equipmentType": [
+      "MeleeWeapon"
+    ]
+  }
 }

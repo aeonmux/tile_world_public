@@ -9,6 +9,7 @@ class EquipmentSelectModal extends HTMLElement {
         this.currentEquipmentLabel = "";
         this.lastSlots = [];
         this.isActive = false;
+        this.collapseState = {};
         this.innerHTML = `
             <div class="modal fade" id="equipmentSelectModal" tabindex="-1" aria-labelledby="equipmentSelectLabel" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered modal-lg">
@@ -33,7 +34,6 @@ class EquipmentSelectModal extends HTMLElement {
     connectedCallback() {
         window.addEventListener("player-inventory-updated", (event) => {
             const slots = event?.detail?.slots || [];
-            if (JSON.stringify(this.lastSlots) === JSON.stringify(slots)) return;
             this.lastSlots = slots;
             if (this.isActive) {
                 this.renderSlots();
@@ -47,9 +47,7 @@ class EquipmentSelectModal extends HTMLElement {
                 const detailsEl = this.querySelector("#equipmentSelectModal");
                 const detailsModal = detailsEl ? bootstrap.Modal.getInstance(detailsEl) : null;
                 if (detailsModal) detailsModal.hide();
-                const networkEl = document.querySelector("#gnosysNetworkModal");
-                const networkModal = networkEl ? new bootstrap.Modal(networkEl) : null;
-                if (networkModal) networkModal.show();
+                this.openReturnModal();
             });
         }
 
@@ -114,14 +112,24 @@ class EquipmentSelectModal extends HTMLElement {
                 const detailsEl = this.querySelector("#equipmentSelectModal");
                 const detailsModal = detailsEl ? bootstrap.Modal.getInstance(detailsEl) : null;
                 if (detailsModal) detailsModal.hide();
-                const networkEl = document.querySelector("#gnosysNetworkModal");
-                const networkModal = networkEl ? new bootstrap.Modal(networkEl) : null;
-                if (networkModal) networkModal.show();
+                this.openReturnModal();
             },
-            decrementOnUse: false,
+            collapseState: this.collapseState,
         });
         decorateUI(this);
 
+    }
+
+    openReturnModal() {
+        if (window.gameState === "Playing") {
+            const statusEl = document.querySelector("#statusModal");
+            const statusModal = statusEl ? new bootstrap.Modal(statusEl) : null;
+            if (statusModal) statusModal.show();
+            return;
+        }
+        const networkEl = document.querySelector("#gnosysNetworkModal");
+        const networkModal = networkEl ? new bootstrap.Modal(networkEl) : null;
+        if (networkModal) networkModal.show();
     }
 }
 

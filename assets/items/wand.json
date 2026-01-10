@@ -1,4 +1,9 @@
 {
   "name": "Wand",
-  "_type": "Weapon"
+  "_type": "Weapon",
+  "equipment_details": {
+    "equipmentType": [
+      "RangedWeapon"
+    ]
+  }
 }

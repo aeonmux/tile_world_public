@@ -1,4 +1,9 @@
 {
   "name": "Sabatons",
-  "_type": "Armor"
+  "_type": "Armor",
+  "equipment_details": {
+    "equipmentType": [
+      "Feet"
+    ]
+  }
 }

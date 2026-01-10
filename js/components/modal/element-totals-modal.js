@@ -4,6 +4,7 @@ class ElementTotalsModal extends HTMLElement {
     constructor() {
         super();
         this.previousInventoryJSON = "";
+        this.isActive = false;
         this.innerHTML = `
       <div class="modal fade" id="elementsModal" tabindex="-1" aria-labelledby="elementsModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-lg">
@@ -28,13 +29,28 @@ class ElementTotalsModal extends HTMLElement {
     }
 
     connectedCallback() {
-        registerGnoSysServerEventHandler(ServerEvent.PLAYER_UPDATE, (playerInfo) => {
-            const slots = playerInfo.inventory?.slots || [];
-            const json = JSON.stringify(slots);
-            if (json === this.previousInventoryJSON) return;
+        const modalEl = this.querySelector("#elementsModal");
+        if (modalEl) {
+            modalEl.addEventListener("show.bs.modal", () => this.onShow());
+            modalEl.addEventListener("hidden.bs.modal", () => this.onClose());
+        }
+    }
+
+    onShow() {
+        this.isActive = true;
+        const slots = window.playerInventory?.slots || [];
+        const json = JSON.stringify(slots);
+        if (json !== this.previousInventoryJSON) {
             this.previousInventoryJSON = json;
-            this.renderTotals(slots);
-        });
+        }
+        this.renderTotals(slots);
+    }
+
+    onClose() {
+        this.isActive = false;
+        this.previousInventoryJSON = "";
+        const container = this.querySelector(".element-totals-container");
+        if (container) container.innerHTML = "";
     }
 
     renderTotals(slots) {

@@ -1,4 +1,10 @@
 {
   "name": "Spear",
-  "_type": "Weapon"
+  "_type": "Weapon",
+  "tile_animation": "SpearStrike",
+  "equipment_details": {
+    "equipmentType": [
+      "MeleeWeapon"
+    ]
+  }
 }

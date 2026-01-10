@@ -1,4 +1,10 @@
 {
   "name": "Dagger",
-  "_type": "Weapon"
+  "_type": "Weapon",
+  "tile_animation": "Dagger",
+  "equipment_details": {
+    "equipmentType": [
+      "MeleeWeapon"
+    ]
+  }
 }

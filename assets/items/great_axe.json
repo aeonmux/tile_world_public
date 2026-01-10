@@ -1,4 +1,10 @@
 {
   "name": "GreatAxe",
-  "_type": "Weapon"
+  "_type": "Weapon",
+  "tile_animation": "Slash",
+  "equipment_details": {
+    "equipmentType": [
+      "MeleeWeapon"
+    ]
+  }
 }

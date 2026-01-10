@@ -120,7 +120,18 @@ class LoginModal extends HTMLElement {
                         <span class="w-20">| Pleroma: ${account.pleroma}</span>
                         <span class="w-20">| Playtime: 12:23:22</span>
                     `;
-                    infoItem.addEventListener('click', () => {
+                    infoItem.addEventListener('click', async () => {
+                        if (window.electron && typeof window.electron.findHeapData === "function") {
+                            try {
+                                const heap = await window.electron.findHeapData(account.name);
+                                if (heap) {
+                                    console.log("sending heap data ");
+                                    gnoSysTransmitClientEvent("LoadHeap", JSON.stringify(heap));
+                                }
+                            } catch (error) {
+                                console.error("Error loading heap data:", error);
+                            }
+                        }
                         gnoSysTransmitClientEvent("LoadSave", JSON.stringify(account));
                         this.modals.account.hide();
                     });

@@ -11,5 +11,8 @@ export const ClientEvent = Object.freeze({
   EQUIP_ITEM: "EquipItem",
   AMPLIFY_EMANATION: "AmplifyEmanation",
   DIAL_HEX_ADDRESS: "DialHexAddress",
-  START_GAME: "StartGame"
+  START_GAME: "StartGame",
+  MOVE_ALL_TO_HEAP: "MoveAllToHeap",
+  MOVE_TO_STACK: "MoveToStack",
+  MOVE_TO_HEAP: "MoveToHeap",
 });

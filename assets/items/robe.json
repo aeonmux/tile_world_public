@@ -1,4 +1,9 @@
 {
   "name": "Robe",
-  "_type": "Clothing"
+  "_type": "Clothing",
+  "equipment_details": {
+    "equipmentType": [
+      "Chest"
+    ]
+  }
 }

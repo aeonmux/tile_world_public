@@ -1,4 +1,10 @@
 {
   "name": "Halberd",
-  "_type": "Weapon"
+  "_type": "Weapon",
+  "tile_animation": "Swipe",
+  "equipment_details": {
+    "equipmentType": [
+      "MeleeWeapon"
+    ]
+  }
 }

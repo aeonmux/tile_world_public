@@ -47,7 +47,7 @@ class Log extends HTMLElement {
             logContainer.scrollTop = 0;
 
             
-            const MAX_LOGS = 1000;
+            const MAX_LOGS = 100;
             while (logContainer.children.length > MAX_LOGS) {
                 logContainer.removeChild(logContainer.lastElementChild);
             }

@@ -1,3 +1,5 @@
+import {ensurePersonaLayout, renderPersonaEquipment} from "./persona-shared.js";
+
 class StatusModal extends HTMLElement {
     constructor() {
         super();
@@ -9,15 +11,7 @@ class StatusModal extends HTMLElement {
                             <h1 class="modal-title arcane-container-header fs-5" id="exampleModalLabel">Check / Status </h1>
                         </div>
                         <div class="modal-body">
-                            <p>This is the status modal. Insert your content here.</p>
-                            <p>This is the status modal. Insert your content here.</p>
-                            <p>This is the status modal. Insert your content here.</p>
-                            <p>This is the status modal. Insert your content here.</p>
-                            <p>This is the status modal. Insert your content here.</p>
-                            <p>This is the status modal. Insert your content here.</p>
-                            <p>This is the status modal. Insert your content here.</p>
-                            <p>This is the status modal. Insert your content here.</p>
-                            <p>This is the status modal. Insert your content here.</p>
+                            <div id="status-persona-content"></div>
                         </div>
                         <div class="modal-footer">
                             <div class="arcane-container-standalone-item">
@@ -31,7 +25,29 @@ class StatusModal extends HTMLElement {
     }
 
     connectedCallback() {
+        const content = this.querySelector("#status-persona-content");
+        let isActive = false;
+        ensurePersonaLayout(content);
 
+        const renderStatus = () => {
+            if (!isActive) return;
+            renderPersonaEquipment(content);
+        };
+
+        const modalEl = this.querySelector("#statusModal");
+        if (modalEl) {
+            modalEl.addEventListener("show.bs.modal", () => {
+                isActive = true;
+                renderStatus();
+            });
+            modalEl.addEventListener("hidden.bs.modal", () => {
+                isActive = false;
+            });
+        }
+
+        window.addEventListener("player-inventory-updated", () => {
+            renderStatus();
+        });
     }
 }
 

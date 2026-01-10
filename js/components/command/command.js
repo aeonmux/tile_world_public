@@ -76,7 +76,7 @@ class ArcaneCommand extends HTMLElement {
 
         // Items whose modals are not yet functional should be disabled
         const disabledItems = [
-            'statusItem',
+            // 'statusItem',
             // 'aeonItem',
             'honeItem',
             'refineItem',

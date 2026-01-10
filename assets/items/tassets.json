@@ -1,4 +1,9 @@
 {
   "name": "Tassets",
-  "_type": "Armor"
+  "_type": "Armor",
+  "equipment_details": {
+    "equipmentType": [
+      "Legs"
+    ]
+  }
 }

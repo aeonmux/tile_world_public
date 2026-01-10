@@ -4,6 +4,7 @@ import {initNetworkTab} from "./gnosys-network-tabs/network-tab.js";
 import {initPersonaTab} from "./gnosys-network-tabs/persona-tab.js";
 import {initTradingTab} from "./gnosys-network-tabs/trading-tab.js";
 import {decorateUI} from "../../util/ui-decorator.js";
+import {initInventoryTab} from "./gnosys-network-tabs/inventory-tab.js";
 
 class GnoSysNetworkModal extends HTMLElement {
     constructor() {
@@ -20,6 +21,11 @@ class GnoSysNetworkModal extends HTMLElement {
                                 <li class="nav-item" role="presentation">
                                     <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#gn-tab-persona" type="button" role="tab">
                                         Persona
+                                    </button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link" data-bs-toggle="tab" data-bs-target="#gn-tab-inventory" type="button" role="tab" id="gn-tab-inventory-btn">
+                                        Inventory
                                     </button>
                                 </li>
                                 <li class="nav-item" role="presentation">
@@ -46,6 +52,9 @@ class GnoSysNetworkModal extends HTMLElement {
                             <div class="tab-content mt-3">
                                 <div class="tab-pane fade show active" id="gn-tab-persona" role="tabpanel">
                                     <div id="gn-persona-content"></div>
+                                </div>
+                                <div class="tab-pane fade" id="gn-tab-inventory" role="tabpanel">
+                                    <div id="gn-inventory-content"></div>
                                 </div>
                                 <div class="tab-pane fade" id="gn-tab-contracts" role="tabpanel">
                                     <div id="gn-contracts-list">
@@ -96,13 +105,36 @@ class GnoSysNetworkModal extends HTMLElement {
         }
 
         initPersonaTab(this);
+        initInventoryTab(this);
         initContractsTab(this);
         initTradingTab(this);
         initNetworkTab(this);
 
+        const inventoryTabBtn = this.querySelector("#gn-tab-inventory-btn");
+        if (inventoryTabBtn) {
+            inventoryTabBtn.addEventListener("shown.bs.tab", () => {
+                const playBtn = this.querySelector("#gnosysNetworkPlay");
+                if (playBtn) {
+                    playBtn.textContent = "Move All To Heap";
+                    playBtn.dataset.mode = "inventory";
+                }
+            });
+            inventoryTabBtn.addEventListener("hidden.bs.tab", () => {
+                const playBtn = this.querySelector("#gnosysNetworkPlay");
+                if (playBtn) {
+                    playBtn.textContent = "Enter / Kenoma";
+                    playBtn.dataset.mode = "";
+                }
+            });
+        }
+
         const playBtn = this.querySelector("#gnosysNetworkPlay");
         if (playBtn) {
             playBtn.addEventListener("click", () => {
+                if (playBtn.dataset.mode === "inventory") {
+                    gnoSysTransmitClientEvent(ClientEvent.MOVE_ALL_TO_HEAP);
+                    return;
+                }
                 gnoSysTransmitClientEvent(ClientEvent.START_GAME);
                 const modalEl = this.querySelector("#gnosysNetworkModal");
                 const inst = bootstrap.Modal.getInstance(modalEl);

@@ -32,19 +32,19 @@ class AeonModal extends HTMLElement {
     }
 
     connectedCallback() {
-        registerGnoSysServerEventHandler(ServerEvent.PLAYER_UPDATE, (playerInfo) => {
-            const slots = playerInfo.inventory.slots.filter(slot => slot.item._type === "Aeon");
-            const json = JSON.stringify(slots);
-            const pleroma = playerInfo.pleroma;
-
-            if (json === this.previousInventoryJSON && pleroma === this.previousPleroma) return;
-
-            this.previousInventoryJSON = json;
-            this.previousPleroma = pleroma;
-            this.emanations = slots;
-            this.pleroma = pleroma;
-            this.renderEmanations();
-        });
+        // registerGnoSysServerEventHandler(ServerEvent.PLAYER_UPDATE, (playerInfo) => {
+        //     const slots = playerInfo.inventory.slots.filter(slot => slot.item._type === "Aeon");
+        //     const json = JSON.stringify(slots);
+        //     const pleroma = playerInfo.pleroma;
+        //
+        //     if (json === this.previousInventoryJSON && pleroma === this.previousPleroma) return;
+        //
+        //     this.previousInventoryJSON = json;
+        //     this.previousPleroma = pleroma;
+        //     this.emanations = slots;
+        //     this.pleroma = pleroma;
+        //     this.renderEmanations();
+        // });
     }
 
     renderEmanations() {

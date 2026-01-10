@@ -1,6 +1,7 @@
 
 export const ServerEvent = Object.freeze({
   PLAYER_UPDATE: "PlayerUpdate",
+  HEAP_UPDATE: "HeapUpdate",
   NEW_LOG_MESSAGE: "NewLogMessage",
   CLIENT_NOTIFICATION: "ClientNotification",
   REGISTERED_ITEMS: "RegisteredItems",

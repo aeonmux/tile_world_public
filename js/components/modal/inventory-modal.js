@@ -9,6 +9,7 @@ class InventoryModal extends HTMLElement {
         
         this.sortOrder = "desc";
         this.isActive = false;
+        this.collapseState = {};
 
         this.innerHTML = `
       <div class="modal fade" id="inventoryModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -97,8 +98,7 @@ class InventoryModal extends HTMLElement {
             onHover: (itemDetails) => {
                 this.renderInspector(inspector, itemDetails);
             },
-            enableHoldRepeat: true,
-            decrementOnUse: true,
+            collapseState: this.collapseState,
         });
     }
 
